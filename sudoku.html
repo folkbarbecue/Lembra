@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lembre+</title>
+        <link rel="icon" href="./assets/img/favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: rgb(233, 233, 233);
+            margin: 0;
+        }
+        #sudoku, #solvedSudoku {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Cada linha contém 3 quadrantes */
+            width: 90vmin; /* Ajusta a largura do grid com base no tamanho da tela */
+            max-width: 600px; /* Largura máxima para telas maiores */
+            margin-bottom: 20px;
+            overflow: auto; /* Permite rolagem se necessário */
+        }
+        .quadrant {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Cada quadrante contém 3 células em cada linha */
+            border: 2px solid #333; /* Borda para os quadrantes */
+            transition: background-color 0.3s; /* Transição suave para a cor de fundo */
+        }
+        .cell {
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            height: 10vmin; /* Ajusta a altura com base na tela */
+            box-sizing: border-box; /* Inclui o padding e a borda na largura e altura */
+        }
+        .cell input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            text-align: center;
+            font-size: inherit;
+            box-shadow: inset 0 0 2px #888;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            background-color: #723ed9;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #5500ff;
+        }
+        #message {
+            margin-top: 20px; /* Coloca a mensagem abaixo do Sudoku */
+            font-size: 1.5rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sudoku"></div>
+    <div id="solvedSudoku" style="display: none;"></div> <!-- Sudoku resolvido inicialmente oculto -->
+
+    <div>
+        <button id="startBtn">Iniciar Jogo</button>
+        <button id="checkBtn">Verificar</button>
+        <a href="p3.html"><button id="resetBtn">Voltar</button></a>
+    </div>
+
+    <script>
+        const sudokuContainer = document.getElementById('sudoku');
+        const solvedSudokuContainer = document.getElementById('solvedSudoku');
+        const startBtn = document.getElementById('startBtn');
+        const checkBtn = document.getElementById('checkBtn');
+
+        // Função para gerar um Sudoku válido
+        function generateValidSudoku() {
+            const board = Array.from({ length: 9 }, () => Array(9).fill(0));
+
+            // Preenchendo o tabuleiro com uma solução válida
+            function fillBoard() {
+                for (let i = 0; i < 9; i++) {
+                    for (let j = 0; j < 9; j++) {
+                        if (board[i][j] === 0) {
+                            const numbers = Array.from({ length: 9 }, (_, k) => k + 1);
+                            shuffle(numbers);
+                            for (const num of numbers) {
+                                if (isSafe(i, j, num)) {
+                                    board[i][j] = num;
+                                    if (fillBoard()) {
+                                        return true;
+                                    }
+                                    board[i][j] = 0; // Resetar se não funcionar
+                                }
+                            }
+                            return false; // Se nenhum número funcionar, retorna falso
+                        }
+                    }
+                }
+                return true; // Tabuleiro preenchido
+            }
+
+            function isSafe(row, col, num) {
+                for (let x = 0; x < 9; x++) {
+                    // Verifica se o número já está na linha ou coluna
+                    if (board[row][x] === num || board[x][col] === num) {
+                        return false;
+                    }
+                }
+                // Verifica o quadrante 3x3
+                const startRow = Math.floor(row / 3) * 3;
+                const startCol = Math.floor(col / 3) * 3;
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        if (board[i + startRow][j + startCol] === num) {
+                            return false;
+                        }
+                    }
+                }
+                return true; // Se não estiver em linha, coluna ou quadrante
+            }
+
+            fillBoard();
+            return board;
+        }
+
+        // Função para embaralhar os números
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Função para gerar o Sudoku com espaços vazios
+        function generateSudoku() {
+            const solution = generateValidSudoku(); // Gera um Sudoku válido
+            const board = solution.map(row => row.slice()); // Copia a solução
+            sudokuContainer.innerHTML = '';
+
+            // Remove números aleatórios para criar espaços vazios
+            let count = 30; // Número de espaços vazios que você deseja criar
+            while (count > 0) {
+                const i = Math.floor(Math.random() * 9);
+                const j = Math.floor(Math.random() * 9);
+                if (board[i][j] !== 0) {
+                    board[i][j] = 0; // Cria um espaço vazio
+                    count--;
+                }
+            }
+
+            // Gera células com a solução
+            for (let q = 0; q < 9; q++) {
+                const quadrant = document.createElement('div');
+                quadrant.className = 'quadrant';
+                
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        const cellIndex = (Math.floor(q / 3) * 3 + i) * 9 + (q % 3) * 3 + j;
+                        const cell = document.createElement('div');
+                        cell.className = 'cell';
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.maxLength = 1;
+                        input.value = board[Math.floor(cellIndex / 9)][cellIndex % 9] || ''; // Mantém a célula vazia ou preenche com o número
+                        input.readOnly = true; // Torna o campo somente leitura inicialmente
+                        input.addEventListener('input', function() {
+                            this.value = this.value.replace(/[^1-9]/g, ''); // Permite apenas números de 1 a 9
+                        });
+                        cell.appendChild(input);
+                        quadrant.appendChild(cell);
+                    }
+                }
+                sudokuContainer.appendChild(quadrant);
+            }
+            return solution; // Retorna a solução para ser usada mais tarde
+        }
+
+        // Inicia o jogo
+        startBtn.addEventListener('click', function() {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.removeAttribute('readonly'); // Remove o atributo readonly para permitir edição
+            });
+            this.style.display = 'none'; // Esconde o botão "Iniciar Jogo"
+            solvedSudokuContainer.innerHTML = ''; // Limpa o Sudoku resolvido anterior
+        });
+
+        // Verifica a solução do Sudoku
+        checkBtn.addEventListener('click', function() {
+            const inputs = document.querySelectorAll('input');
+            const solution = generateSudoku(); // Gera o Sudoku e obtém a solução
+
+            // Verifica quadrantes
+            for (let q = 0; q < 9; q++) {
+                let correctCount = 0;
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        const cellIndex = (Math.floor(q / 3) * 3 + i) * 9 + (q % 3) * 3 + j;
+                        const row = Math.floor(cellIndex / 9);
+                        const col = cellIndex % 9;
+                        const input = inputs[cellIndex];
+                        if (input.value == solution[row][col]) {
+                            correctCount++;
+                        }
+                    }
+                }
+                if (correctCount === 9) {
+                    const quadrant = sudokuContainer.children[q];
+                    quadrant.classList.add('correct'); // Adiciona a classe para destacar o quadrante
+                }
+            }
+
+            // Mostra ou esconde o Sudoku resolvido
+            if (solvedSudokuContainer.style.display === 'none') {
+                solvedSudokuContainer.style.display = 'grid';
+                for (let q = 0; q < 9; q++) {
+                    const quadrant = document.createElement('div');
+                    quadrant.className = 'quadrant';
+
+                    for (let i = 0; i < 3; i++) {
+                        for (let j = 0; j < 3; j++) {
+                            const cellIndex = (Math.floor(q / 3) * 3 + i) * 9 + (q % 3) * 3 + j;
+                            const cell = document.createElement('div');
+                            cell.className = 'cell';
+                            const input = document.createElement('input');
+                            input.type = 'text';
+                            input.maxLength = 1;
+                            input.value = solution[Math.floor(cellIndex / 9)][cellIndex % 9] || ''; // Preenche com a solução
+                            input.readOnly = true; // Torna somente leitura
+                            cell.appendChild(input);
+                            quadrant.appendChild(cell);
+                        }
+                    }
+                    solvedSudokuContainer.appendChild(quadrant);
+                }
+            } else {
+                solvedSudokuContainer.style.display = 'none'; // Esconde o Sudoku resolvido
+            }
+        });
+
+        // Gera o Sudoku ao carregar a página
+        window.onload = generateSudoku;
+    </script>
+
+</body>
+</html>
