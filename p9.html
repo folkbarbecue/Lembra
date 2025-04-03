@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lembra+</title>
+    <link rel="icon" href="./assets/img/favicon.ico" type="image/x-icon">
+
+</head>
+<body>
+    <style>
+        * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    text-align: center;
+    padding: 1rem;
+    background-color: #723ed9;
+    color: white;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.header img {
+    width: 30px;
+    margin: 0 10px;
+}
+
+.title {
+    margin: 1rem 0;
+}
+
+.inp {
+    width: 80%;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    border-radius: 30px;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1rem;
+}
+p{
+
+    color: black;
+    text-decoration: none;
+
+}
+
+.box {
+    background: #f1f1f1;
+    border: 1px solid #ccc;
+    margin: 10px;
+    padding: 1rem;
+    width: calc(25% - 20px); /* 4 boxes per row with margin */
+    text-align: center;
+    transition: transform 0.3s;
+    border-radius: 40px;
+}
+
+.box:hover {
+    transform: scale(1.05);
+}
+
+.icon {
+    width: 80%; /* Imagem ocupa 80% do box */
+    height: auto;
+    border-radius: 40px;
+}
+p a {
+    text-decoration: none;
+}
+a {
+    text-decoration: none;
+    color: inherit; /* Keeps link color same as surrounding text */
+}
+
+a:hover {
+    text-decoration: underline; /* Adds underline on hover if needed */
+}
+
+
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .box {
+        width: calc(50% - 20px); /* 2 boxes por linha em telas médias */
+    }
+}
+
+@media (max-width: 480px) {
+    .box {
+        width: calc(100% - 20px); /* 1 box por linha em telas pequenas */
+    }
+
+    .inp {
+        width: 90%; /* Aumenta a largura do input em telas pequenas */
+    }
+}
+    </style>
+
+    <div class="header">
+
+
+        <h1 class="title">JOGOS</h1>
+        <input type="text" class="inp" placeholder="Digite aqui o que deseja!">
+    </div>
+
+    <div class="container">
+        <div class="box">
+            <a href="genius.html">
+                <img class="icon" src="assets/img/anel-de-vida.png" alt="">
+                <p class="pa">Genius</p>
+            </a>
+        </div>
+
+        <div class="box">
+            <a href="sudoku.html">
+                <img class="icon" src="assets/img/grid-alt.png" alt="">
+                <p>Sudoku</p>
+            </a>
+        </div>
+
+        <div class="box">
+            <a href="Memory.html">
+                <img class="icon" src="assets/img/circuito-cerebral.png" alt="">
+                <p>Memória</p>
+            </a>
+        </div>
+    </div>
+<script>
+    const gameLinks = document.querySelectorAll('.box a');
+
+    gameLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            let lastGames = JSON.parse(localStorage.getItem('lastGames')) || [];
+
+            // Adiciona o jogo clicado no início do array
+            lastGames.unshift(this.href);
+
+            // Remove jogos antigos se houver mais de 2
+            if (lastGames.length > 2) {
+                lastGames.pop();
+            }
+
+            localStorage.setItem('lastGames', JSON.stringify(lastGames));
+        });
+    });
+</script>
+
+    <script src="script.js"></script>
+</body>
+</html>
