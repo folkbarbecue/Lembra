@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lembra+</title>
+  <link rel="icon" href="./assets/img/favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+
+  <div class="cabeca">Música</div>
+  
+  <div class="pesquisa">
+    <input type="file" id="audioFile" accept="audio/*" multiple>
+    <button id="loadMusic">Carregar Músicas</button>
+  </div>
+
+  <div class="caixa">
+    <div class="descricao">
+      <img id="videoThumbnail" src="./assets/video/giphy.gif" alt="Thumbnail">
+      <h2 id="videoTitle" class="j1">Título da Música</h2>
+      <p id="videoArtist">Artista</p>
+    </div>
+  </div>
+  
+  <audio id="audio"></audio>
+
+  <div class="controle">
+    <button id="prev">&#9664;</button>
+    <button id="playPause">&#9654;</button>
+    <button id="next">&#9658;</button>
+  </div>
+
+  <div class="waveform"></div>
+
+  <div class="lyrics-button">
+    <button id="showLyrics">Ver Letra</button>
+  </div>
+
+  <div id="lyrics" style="display: none;">
+    Letra da música: <br> Eu sou o tropeiro velho...
+  </div>
+
+  <div class="voltar">
+    <button id="backButton">Voltar</button>
+  </div>
+
+  <script src="./assets/script/script.js"></script>
+</body>
+</html>
