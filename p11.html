@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/style4.css">
+    <link rel="icon" href="./assets/img/favicon.ico" type="image/x-icon">
+    <title>Lembre+</title>
+</head>
+<body>
+    <div class="header">Login</div>
+    
+    <div class="search-bar">
+      <input type="text" placeholder="Digite aqui o que deseja!">
+    </div> 
+
+    <div class="bloco">
+        <form action="./connect/cadastro_cuidador.php" method="post">
+            <h5>Insira seu nome completo</h5>
+            <input type="text" name="nome_cuid" id="nome" required>
+
+            <h5>CPF do paciente</h5>
+            <input type="text" name="cpf_cuid" id="cpf" required placeholder="Caso não tenha, não funcionará">
+
+            <h5>Telefone</h5>
+            <input type="text" name="telefone_cuid" id="telefone" required>
+
+            <h5>O código de cuidador</h5>
+            <input type="text" name="cod_cuid" id="sanguineo" required>
+
+            <h5>Id do paciente</h5>
+            <input type="text" name="id_pac" id="remedio" required>
+
+            <h5>Nome completo do paciente</h5>
+            <input type="text" name="restricao_pac" id="restricaoAlimentar">
+
+            <input type="submit" value="Enviar">
+        </form>
+    </div>
+
+    <script src="./assets/script/script3.js"></script>
+</body>
+</html>
