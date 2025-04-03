@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/style2.css">
+    <link rel="icon" href="./assets/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <title>Lembra+</title>
+</head>
+<body>
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <div class="cartao">
+        <div class="cabecalho">
+            <div id="usuario">
+                <p class="saudacao">Oi, <span id="nomePaciente"></span></p>
+                <p class="paciente">Paciente<br><span id="doencaPaciente"></span></p>
+            </div>
+            <div class="perfil">
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </div>
+        <div class="barraBusca">
+            <input type="text" placeholder="O que você precisa?">
+        </div>
+    </div>
+    <div class="icones">
+        <a href="./p6.html" class="linkIcone">
+            <div id="lembretes" class="icone">
+                <span class="material-symbols-outlined">notification_important</span>
+                </br>
+                                </br>
+
+               
+            </div>
+        </a>
+        <a href="./p9.html" class="linkIcone">
+            <div id="jogos" class="icone">
+                <span class="material-symbols-outlined">stadia_controller</span>
+                                </br>
+                </br>
+
+               
+            </div>
+        </a>
+        <a href="./p8.html" class="linkIcone">
+            <div id="videos" class="icone">
+                <span class="material-symbols-outlined">switch_video</span>
+                                </br>
+                </br>
+
+            </div>
+        </a>
+        <a href="./p4.html" class="linkIcone">
+            <div id="musicas" class="icone">
+                <span class="material-symbols-outlined">music_note</span>
+                                </br>
+                </br>
+
+            </div>
+        </a>
+    </div>
+    <div class="lembretes">
+        <h2 class="tituloLembretes">Lembretes</h2>
+    </div>
+    <div id="lembretesContainer"></div>
+    <a href="./p6.html" class="linkVerTodos">Ver todos os lembretes!</a>
+    <h2 class="tituloJogos">Últimos jogos jogados</h2>
+  <h2 class="tituloJogos">Últimos jogos jogados</h2>
+<div class="quadradoJogos" id="jogosRecentes"></div>
+<h2 class="tituloMusica">Última Música Ouvida</h2>
+<div id="ultimaMusica" class="musica">
+    <h2 id="musicaTitulo">Título da Música</h2>
+    <p id="musicaArtista">Artista</p>
+</div>
+
+    
+    <script src="./assets/script/script1.js"></script>
+    <script src="./assets/script/script2.js"></script>
+    <script>
+        window.onload = function() {
+            var dados = JSON.parse(localStorage.getItem('dados'));
+            if (dados) {
+                document.getElementById('nomePaciente').textContent = dados.nome;
+                document.getElementById('doencaPaciente').textContent = dados.doenca;
+            }
+
+            var lastGames = JSON.parse(localStorage.getItem('lastGames')) || [];
+            var jogosContainer = document.getElementById('jogosRecentes');
+            lastGames.forEach(game => {
+                var gameDiv = document.createElement('div');
+                gameDiv.classList.add('imagemJogo');
+                gameDiv.innerHTML = `<a href="${game}">
+                                        <img src="assets/img/1495574030-game-controller_84508.webp" alt="Jogo" class="icon"> 
+                                    </a>`;
+                jogosContainer.appendChild(gameDiv);
+            });
+
+            var lastSong = JSON.parse(localStorage.getItem('lastSong'));
+            if (lastSong) {
+                document.getElementById('musicaTitulo').textContent = lastSong.name;
+                document.getElementById('musicaArtista').textContent = "Artista Desconhecido";
+            }
+        }
+    </script>
+</body>
+</html>
